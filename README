@@ -1,0 +1,32 @@
+Mon Jan 12 22:48:17 IST 2015
+============================
+
+These simple scripts help in converting an RCS collection of files
+into a Git repo.  Usage is:
+
+	rlog RCS/* | awk -f rcs2data.awk |
+		sort | awk -f data2sh.awk > script
+	vim script	# or emacs, we don't discriminate :-)
+	git init .
+	sh -x script
+
+The reason to edit the script is that you may want to add tags
+at certain points along the way.
+
+These scripts are good only for the simple case of a single RCS
+directory with no branches, just straight check-ins. Files that
+were checked in with a single 'ci' command will be added to git
+with a single git commit.
+
+The gendiff.awk script is useful for reconstituting a ChangeLog
+after the fact (if you never had one). Usage is:
+
+	git log | awk -f gendiff.awk > OUT
+
+The generated file contains all the diffs between commits, starting
+with the most current and going backwards. You can review this and
+create a ChangeLog.  This is manual labor, but it need not be too
+terrible (we hope! :-).
+
+Arnold Robbins
+arnold@skeeve.com
